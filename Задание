@@ -1,0 +1,129 @@
+1. Product - класс, описывающий товары в киоске. У него должны быть поля: id, name, type, quantity.
+Java
+
+public class Product {
+    private int id;
+    private String name;
+    private String type;
+    private int quantity;
+
+    // конструкторы, геттеры и сеттеры
+}
+2. Inventory - класс, отвечающий за хранение и управление инвентарем киоска. У него должны быть методы: addProduct, sellProduct, editProduct.
+Java
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Inventory {
+    private List<Product> products;
+
+    public Inventory() {
+        products = new ArrayList<>();
+    }
+
+    public void addProduct(Product product) {
+        products.add(product);
+    }
+
+    public void sellProduct(int productId, int quantity) {
+        for (Product product : products) {
+            if (product.getId() == productId) {
+                if (product.getQuantity() >= quantity) {
+                    product.setQuantity(product.getQuantity() - quantity);
+                    System.out.println("Товар успешно продан.");
+                } else {
+                    System.out.println("Недостаточное количество товара на складе.");
+                }
+                return;
+            }
+        }
+        System.out.println("Товар с данным ID не найден.");
+    }
+
+    public void editProduct(int productId, String name, String type) {
+        for (Product product : products) {
+            if (product.getId() == productId) {
+                product.setName(name);
+                product.setType(type);
+                System.out.println("Данные о товаре успешно изменены.");
+                return;
+            }
+        }
+        System.out.println("Товар с данным ID не найден.");
+    }
+}
+3. Sale - класс, отвечающий за регистрацию продаж. У него должен быть метод registerSale, который принимает ID проданного товара и его количество.
+Java
+
+public class Sale {
+    private int productId;
+    private int quantity;
+
+    public Sale(int productId, int quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
+    public void registerSale(Inventory inventory) {
+        inventory.sellProduct(productId, quantity);
+    }
+}
+4. Kiosk - класс, представляющий интерфейс для взаимодействия с продавцом. Он должен содержать методы для приемки товара, отметки продажи товара и редактирования данных о товаре.
+
+```java
+import java.util.Scanner;
+
+public class Kiosk {
+    private Inventory inventory;
+
+    public Kiosk(Inventory inventory) {
+        this.inventory = inventory;
+    }
+
+    public void start() {
+        Scanner scanner = new Scanner(System.in);
+        int choice = 0;
+
+        while (choice != 4) {
+            System.out.println("1. Приемка товара");
+            System.out.println("2. Отметить продажу товара");
+            System.out.println("3. Редактировать данные о товаре");
+            System.out.println("4. Выход");
+
+            System.out.print("Введите номер операции: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    addProduct();
+                    break;
+                case 2:
+                    sellProduct();
+                    break;
+                case 3:
+                    editProduct();
+                    break;
+                case 4:
+                    System.out.println("Работа завершена.");
+                    break;
+                default:
+                    System.out.println("Некорректный ввод.");
+                    break;
+            }
+        }
+        scanner.close();
+    }
+
+    private void addProduct() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Введите ID товара: ");
+        int productId = scanner.nextInt();
+
+        System.out.print("Введите наименование товара: ");
+        String name = scanner.next();
+
+        System.out.print("Введите тип товара: ");
+        String type = scanner.next();
+
+        Sy
